@@ -8,9 +8,7 @@ This repository contains two Jupyter Notebook files that delve into theoretical 
 - **Objective:** Understand and implement decision trees from a theoretical perspective.
 - **Core Concepts Covered:**
   - **Entropy:** A measure of impurity or uncertainty in a dataset.
-    \[ H = -\sum_{i} p_i \log_2(p_i) \]
   - **Information Gain:** Reduction in entropy achieved after a split.
-    \[ IG = H_{parent} - \left( \frac{N_{left}}{N_{total}} H_{left} + \frac{N_{right}}{N_{total}} H_{right} \right) \]
   - Recursive tree construction based on feature splits.
 - **Practical Implementation:**
   - Manual calculation of entropy and information gain.
