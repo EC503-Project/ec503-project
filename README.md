@@ -26,7 +26,7 @@ This repository contains two Jupyter Notebook files that delve into theoretical 
   - Tuning hyperparameters such as the number of trees (`n_estimators`) and maximum depth (`max_depth`).
   - Visualizing and interpreting feature importance.
 
-## Theoretical Insights
+## 3. **Theoretical Insights**
 1. **Decision Trees:**
    - Effective for datasets with clear decision boundaries.
    - Prone to overfitting, especially with deep trees.
@@ -35,7 +35,7 @@ This repository contains two Jupyter Notebook files that delve into theoretical 
    - Handles missing values and categorical variables effectively.
    - Provides robust performance on diverse datasets.
 
-## Results
+## 4. **Results**
 - **Decision Tree Classifier:** Provides interpretability but may overfit.
   - Accuracy: ~81.7%.
 - **Random Forest Classifier:** Balances accuracy and generalization with criteria as "entropy".
