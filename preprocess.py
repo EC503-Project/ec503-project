@@ -1,45 +1,43 @@
 import pandas as pd
-import numpy as np
-from sklearn.preprocessing import MinMaxScaler
+# import scipy
 from sklearn.model_selection import train_test_split
-
-data_scaler = MinMaxScaler()
+import numpy as np
+# from sklearn.preprocessing import MinMaxScaler
+# import seaborn as sns
+# import matplotlib.pyplot as plt
 
 fashion_df_train = pd.read_csv('data/fashion-mnist_train.csv')
 fashion_df_test = pd.read_csv('data/fashion-mnist_test.csv')
-fashion_df = pd.concat([fashion_df_train, fashion_df_test])
-fashion_df.head()
-fashion_df.describe()
-data_scaler.fit(fashion_df)
-fashion_df = data_scaler.transform(fashion_df)
-fashion_df = pd.DataFrame(fashion_df)
-fashion_df_train, fashion_df_test = train_test_split(fashion_df)
+fashion_df = fashion_df_train
+
+# concatenate mnist together
+for col in fashion_df:
+  fashion_df[col].append(fashion_df_test[col])
+
+# songs_df = pd.read_csv('data/songs.csv')
 
 # generate synthetic data
 synthetic_data = np.random.normal(100, 3, size=(10, 100))
 synthetic_data_df = pd.DataFrame(synthetic_data)
 synthetic_rows, synthetic_cols = synthetic_data_df.shape
-synthetic_data_df.head()
-synthetic_data_df.describe()
-data_scaler.fit(synthetic_data_df)
-synthetic_data_df = data_scaler.transform(synthetic_data_df)
-synthetic_data_df[0] = np.random.randint(1, 5, size=(1, synthetic_cols))
-synthetic_data_df = pd.DataFrame(synthetic_data_df)
-synthetic_data_df_train, synthetic_data_df_test = train_test_split(synthetic_data_df)
+# synthetic_data_df['labels'] = np.random.randint(1, 5, size=(synthetic_rows,1))
+
 # make array of dfs
 dfs = []
 
 dfs.append(fashion_df)
+# dfs.append(songs_df)
 dfs.append(synthetic_data_df)
 
 no_outliers_dfs = []
 masked_dfs = []
-outlier_dfs = []
+imbalanced_dfs = []
 removed_portions_masked = []
+
 
 # generate batches with removed features, store removed
 for df in dfs:
-  for col in df.columns:
+  for col in df:
     quartile_1 = np.percentile(df[col], 25, axis=0)
     quartile_3 = np.percentile(df[col], 75, axis=0)
     iqr = quartile_3 - quartile_1
@@ -51,29 +49,73 @@ for df in dfs:
 
 for df in dfs:
   masked_dfs.append(df.mask(df > 4, 0))
-  outlier_dfs.append(df.mask(df > 2, df/10**6))
+  imbalanced_dfs.append(df.mask(df > 2, df/10**6))
   removed_portions_masked.append(df.where(df>2))
 
+# partition into train/test
+dfs_train = []
+dfs_test = []
+
+for df in dfs:
+  train, test = train_test_split(df)
+  dfs_train.append(train)
+  dfs_test.append(test)
+
+no_outliers_dfs_train = []
+no_outliers_dfs_test = []
+
+for df in no_outliers_dfs:
+  train, test = train_test_split(df)
+  no_outliers_dfs_train.append(train)
+  no_outliers_dfs_test.append(test)
+
+masked_dfs_train = []
+masked_dfs_test = []
+
 for df in masked_dfs:
-    print(df.head())
-    print(df.describe())
+  train, test = train_test_split(df)
+  masked_dfs_train.append(train)
+  masked_dfs_test.append(test)
 
-for df in outlier_dfs:
-    print(df.head())
-    print(df.describe())
+imbalanced_dfs_train = []
+imbalanced_dfs_test = []
 
-for df in removed_portions_masked:
-    print(df.head())
-    print(df.describe())
+for df in imbalanced_dfs:
+  train, test = train_test_split(df)
+  imbalanced_dfs_train.append(train)
+  imbalanced_dfs_test.append(test)
 
-titanic_df_train = pd.read_csv('data/titanic_train.csv')
-titanic_df_test = pd.read_csv('data/titanic_test.csv')
-titanic_df_genders = pd.read_csv('data/titanic_gender_submission.csv')
-titanic_df = pd.concat([titanic_df_train, titanic_df_test])
-titanic_df = pd.merge(titanic_df, titanic_df_genders, how='left', on='PassengerId')
-titanic_df_train, titanic_df_test = train_test_split(titanic_df)
+# describe
+for df in dfs_train:
+  print(df.describe())
 
-books_df = pd.read_csv('data/Books.csv')
-ratings_df = pd.read_csv('data/Ratings.csv')
-books_df = pd.merge(books_df, ratings_df, how='left', on='ISBN')
-books_df_train, books_df_test = train_test_split(books_df)
+for df in dfs_test:
+  print(df.describe())
+
+for df in no_outliers_dfs_train:
+  print(df.describe())
+
+for df in no_outliers_dfs_test:
+  print(df.describe())
+
+for df in masked_dfs_train:
+  print(df.describe())
+
+for df in masked_dfs_test:
+  print(df.describe())
+
+for df in imbalanced_dfs_train:
+  print(df.describe())
+
+for df in imbalanced_dfs_test:
+  print(df.describe())
+
+# "link" to model
+
+
+
+
+
+
+
+
