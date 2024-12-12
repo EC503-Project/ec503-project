@@ -5,8 +5,8 @@ from sklearn.model_selection import train_test_split
 
 data_scaler = MinMaxScaler()
 
-fashion_df_train = pd.read_csv('data/fashion-mnist_train.csv')
-fashion_df_test = pd.read_csv('data/fashion-mnist_test.csv')
+fashion_df_train = pd.read_csv('fashion-mnist_train.csv')
+fashion_df_test = pd.read_csv('fashion-mnist_test.csv')
 fashion_df = pd.concat([fashion_df_train, fashion_df_test])
 fashion_df.head()
 fashion_df.describe()
@@ -66,14 +66,11 @@ for df in removed_portions_masked:
     print(df.head())
     print(df.describe())
 
-titanic_df_train = pd.read_csv('data/titanic_train.csv')
-titanic_df_test = pd.read_csv('data/titanic_test.csv')
-titanic_df_genders = pd.read_csv('data/titanic_gender_submission.csv')
-titanic_df = pd.concat([titanic_df_train, titanic_df_test])
-titanic_df = pd.merge(titanic_df, titanic_df_genders, how='left', on='PassengerId')
+
+titanic_df = pd.read_csv('titanic.csv')
 titanic_df_train, titanic_df_test = train_test_split(titanic_df)
 
-books_df = pd.read_csv('data/Books.csv')
-ratings_df = pd.read_csv('data/Ratings.csv')
+books_df = pd.read_csv('Books.csv')
+ratings_df = pd.read_csv('Ratings.csv')
 books_df = pd.merge(books_df, ratings_df, how='left', on='ISBN')
 books_df_train, books_df_test = train_test_split(books_df)
