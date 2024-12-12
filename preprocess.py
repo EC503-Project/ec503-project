@@ -51,7 +51,7 @@ for df in dfs:
 
 for df in dfs:
   masked_dfs.append(df.mask(df > 4, 0))
-  outlier_dfs.append(df.mask(df > 2, df/10**6))
+  outlier_dfs.append(df.mask(df > 2, df/10**4))
   removed_portions_masked.append(df.where(df>2))
 
 for df in masked_dfs:
